@@ -1,0 +1,83 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dominio", "Dominio", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Local", "Local", "{79857E71-CA4E-49E9-83C8-C388539D77AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{1AC73389-CD78-45F7-95CA-D506B6D0DCAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventoRemember.BuildingBlocks.Domain", "src\BuildingBlocks\EventoRemember.BuildingBlocks.Domain\EventoRemember.BuildingBlocks.Domain.csproj", "{1B3448F4-D4E1-4E16-8967-AC840E5A1D3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventoRemember.Locais.Domain", "src\Modules\Locais\EventoRemember.Locais.Dominio\EventoRemember.Locais.Domain.csproj", "{433BEB33-A1F5-43FF-B908-B7CFA355A51F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventoRemember.BuildingBlocks.Application", "src\BuildingBlocks\EventoRemember.BuildingBlocks.Aplicacao\EventoRemember.BuildingBlocks.Application.csproj", "{E27DAA8F-5030-4D63-AE14-93E599DDD9AC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1B3448F4-D4E1-4E16-8967-AC840E5A1D3B} = {1B3448F4-D4E1-4E16-8967-AC840E5A1D3B}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Evento", "Evento", "{4C5874ED-4696-49AE-84AE-EAFB14DEAB12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventoRemember.Evento.Domain", "src\Modules\Evento\EventoRemember.Evento.Domain\EventoRemember.Evento.Domain.csproj", "{4DC554E3-83B3-4919-B555-FF6397C291E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventoRemember.Locais.Tests", "src\Modules\Locais\EventoRemember.Locais.Tests\EventoRemember.Locais.Tests.csproj", "{63D6B0CA-D47A-4EB7-A560-7F8CAD7146D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventoRemember.Locais.Application", "src\Modules\Locais\EventoRemember.Locais.Application\EventoRemember.Locais.Application.csproj", "{B9A4EAFD-7DEA-4046-A9E4-D6C2984BB1A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventoRemember.Locais.Infra", "src\Modules\Locais\EventoRemember.Locais.Infra\EventoRemember.Locais.Infra.csproj", "{F8EEA3FD-5A32-42AE-807B-B4EBCD345041}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B3448F4-D4E1-4E16-8967-AC840E5A1D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3448F4-D4E1-4E16-8967-AC840E5A1D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3448F4-D4E1-4E16-8967-AC840E5A1D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3448F4-D4E1-4E16-8967-AC840E5A1D3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{433BEB33-A1F5-43FF-B908-B7CFA355A51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{433BEB33-A1F5-43FF-B908-B7CFA355A51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{433BEB33-A1F5-43FF-B908-B7CFA355A51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{433BEB33-A1F5-43FF-B908-B7CFA355A51F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E27DAA8F-5030-4D63-AE14-93E599DDD9AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E27DAA8F-5030-4D63-AE14-93E599DDD9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E27DAA8F-5030-4D63-AE14-93E599DDD9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E27DAA8F-5030-4D63-AE14-93E599DDD9AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DC554E3-83B3-4919-B555-FF6397C291E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DC554E3-83B3-4919-B555-FF6397C291E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DC554E3-83B3-4919-B555-FF6397C291E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DC554E3-83B3-4919-B555-FF6397C291E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63D6B0CA-D47A-4EB7-A560-7F8CAD7146D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D6B0CA-D47A-4EB7-A560-7F8CAD7146D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D6B0CA-D47A-4EB7-A560-7F8CAD7146D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D6B0CA-D47A-4EB7-A560-7F8CAD7146D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9A4EAFD-7DEA-4046-A9E4-D6C2984BB1A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9A4EAFD-7DEA-4046-A9E4-D6C2984BB1A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9A4EAFD-7DEA-4046-A9E4-D6C2984BB1A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9A4EAFD-7DEA-4046-A9E4-D6C2984BB1A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8EEA3FD-5A32-42AE-807B-B4EBCD345041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8EEA3FD-5A32-42AE-807B-B4EBCD345041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8EEA3FD-5A32-42AE-807B-B4EBCD345041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8EEA3FD-5A32-42AE-807B-B4EBCD345041}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79857E71-CA4E-49E9-83C8-C388539D77AA} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{1B3448F4-D4E1-4E16-8967-AC840E5A1D3B} = {1AC73389-CD78-45F7-95CA-D506B6D0DCAC}
+		{433BEB33-A1F5-43FF-B908-B7CFA355A51F} = {79857E71-CA4E-49E9-83C8-C388539D77AA}
+		{E27DAA8F-5030-4D63-AE14-93E599DDD9AC} = {1AC73389-CD78-45F7-95CA-D506B6D0DCAC}
+		{4C5874ED-4696-49AE-84AE-EAFB14DEAB12} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{4DC554E3-83B3-4919-B555-FF6397C291E3} = {4C5874ED-4696-49AE-84AE-EAFB14DEAB12}
+		{63D6B0CA-D47A-4EB7-A560-7F8CAD7146D0} = {79857E71-CA4E-49E9-83C8-C388539D77AA}
+		{B9A4EAFD-7DEA-4046-A9E4-D6C2984BB1A3} = {79857E71-CA4E-49E9-83C8-C388539D77AA}
+		{F8EEA3FD-5A32-42AE-807B-B4EBCD345041} = {79857E71-CA4E-49E9-83C8-C388539D77AA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD7729E5-8649-470A-809C-4ECF3129E0FB}
+	EndGlobalSection
+EndGlobal
