@@ -10,6 +10,7 @@
         Teatro,
         Auditorio,
         Praia,
-        Clube
+        Clube,
+        Avenida
     }
 }

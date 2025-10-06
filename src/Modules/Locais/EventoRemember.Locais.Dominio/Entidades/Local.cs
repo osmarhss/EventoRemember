@@ -1,6 +1,8 @@
 ﻿using EventoRemember.BuildingBlocks.Domain.Entidade;
 using EventoRemember.BuildingBlocks.Domain.Exceptions;
+using EventoRemember.BuildingBlocks.Domain.Validators;
 using EventoRemember.Locais.Domain.Entidades;
+using EventoRemember.Locais.Domain.Validators;
 using EventoRemember.Locais.Domain.VOs;
 using EventoRemember.Locais.Dominio.Enum;
 
@@ -12,11 +14,14 @@ namespace EventoRemember.Locais.Dominio.Entidades
         private readonly List<Setor> _setores = new();
 
         protected Local() { } //EF
-        private Local(string nome, int capacidadeTotal, TipoLocal tipo, EnderecoVo endereco, 
-            IEnumerable<ImagemVo> imagens, IEnumerable<Setor> setores) : base()
+        private Local(string nome, string descricao, int capacidadeTotal, bool setoresPersonalizaveis, double? metrosQuadUtilizaveis, 
+            TipoLocal tipo, EnderecoVo endereco, IEnumerable<ImagemVo> imagens, IEnumerable<Setor> setores) : base()
         {
             Nome = nome;
             CapacaidadeTotal = capacidadeTotal;
+            Ativo = false;
+            PodePersonalizarSetores = setoresPersonalizaveis;
+            MetrosQuadUtilizaveis = metrosQuadUtilizaveis;
             Tipo = tipo;
             Endereco = endereco;
             _imagens = imagens.ToList() ?? new();
@@ -24,107 +29,77 @@ namespace EventoRemember.Locais.Dominio.Entidades
         }
 
         public string Nome { get; private set; }
+        public string Descricao { get; private set; }
         public int CapacaidadeTotal { get; private set; }
         public bool Ativo { get; private set; } = false;
+        public bool PodePersonalizarSetores { get; private set; }
+        public double? MetrosQuadUtilizaveis { get; private set; }
+        public string? MotivoInvalido { get; private set; }
         public TipoLocal Tipo { get; private set; }
         public EnderecoVo Endereco { get; private set; }
         public IReadOnlyCollection<Setor> Setores => _setores.AsReadOnly();
         public IReadOnlyCollection<ImagemVo> Imagens => _imagens.AsReadOnly();
 
-        public static Local Criar(string nome, int capacidadeTotal, TipoLocal tipo, EnderecoVo endereco, 
-            IEnumerable<ImagemVo> imagens, IEnumerable<Setor> setores) 
+        public static Result<Local> Criar(string nome, string descricao, int capacidadeTotal, bool setoresPersonalizaveis, double metrosQuadrados, 
+            TipoLocal tipo, EnderecoVo endereco, IEnumerable<ImagemVo> imagens, IEnumerable<Setor> setores) 
         {
-            ValidarNome(nome);
+            var validator = LocalValidator.ValidarAoCriar(nome, capacidadeTotal, imagens, setores);
 
-            if (setores.Any())
-                ValidarCapacidadeMax(capacidadeTotal, setores);
+            if (validator.Errors.Count > 0)
+                return Result<Local>.Failure(validator.Errors);
 
-            return new Local(nome, capacidadeTotal, tipo, endereco, imagens, setores);
+            var local = new Local(nome, descricao, capacidadeTotal, setoresPersonalizaveis, metrosQuadrados, tipo, endereco, imagens, setores);
+
+            return Result<Local>.Success(local);
         }
 
-        public void AdicionarImagens(IEnumerable<ImagemVo> listaImagensAdd) 
+        public Result AtualizarDados(string nome, int capacidadeMax, TipoLocal tipo)
         {
-            if (_imagens.Count + listaImagensAdd.Count() > 10)
-                throw new DomainException("Capacidade máxima de fotos atingida.");
+            var validator = LocalValidator.ValidarAoAtualizarDados(nome, capacidadeMax);
 
-            foreach (var imagem in listaImagensAdd)
-            {
-                if (_imagens.Contains(imagem))
-                    throw new DomainException("Imagens duplicadas não são permitidas");
+            if (validator.Errors.Count > 0)
+                return Result.Failure(validator.Errors);
 
-                _imagens.Add(imagem);
-            }
-        }
-
-        public void AtualizarDados(string nome, TipoLocal tipo)
-        {
             Nome = nome;
+            CapacaidadeTotal = capacidadeMax;
+
+            if ((int)tipo > 10)
+                throw new DomainException("Opção de tipo de local inexistante");
+            
             Tipo = tipo;
+
+            return Result.Success();
         }
 
-        public void IncluirSetores(IEnumerable<Setor> setores) 
+        public Result AdicionarNovasImagens(IEnumerable<ImagemVo> novasImagens) 
         {
-            ValidarCapacidadeMax(setores);
+            var validator = LocalValidator.ValidarAoIncluirNovasImagens(_imagens, novasImagens);
 
-            _setores.AddRange(setores);
+            if (validator.Errors.Count > 0)
+                return Result.Failure(validator.Errors);
+
+            _imagens.AddRange(novasImagens);
+            return Result.Success();
         }
 
-        public void SubstiuirSetores(IEnumerable<Setor> setores)
+        public Result IncluirSetor(Setor setor)
         {
-            ValidarCapacidadeMax(setores);
+            var capacidadeAtual = _setores.Sum(s => s.Capacidade);
+            var validator = LocalValidator.ValidarAoIncluirNovoSetor(setor, capacidadeAtual, CapacaidadeTotal);
 
-            _setores.Clear();
-            _setores.AddRange(setores);
-        }
+            if (validator.Errors.Count > 0)
+                return Result.Failure(validator.Errors);
 
-        public void ExcluirSetores(IEnumerable<Setor> setores) 
-        {
-            foreach (var setor in setores) 
-            {
-                if (setores.Contains(setor)) 
-                    _setores.Remove(setor);
-            }
+            _setores.Add(setor);
+
+            return Result.Success();
         }
+        
+        public void RemoverSetor(Setor setor) 
+            => _setores.Remove(setor);
 
         public void AtualizarEndereco(EnderecoVo novo) 
-        {
-            Endereco = novo;
-        }
-
-        public void DefinirCapacidadeMax(int quantidade) 
-        {
-            CapacaidadeTotal = quantidade;
-        }
-
-        private static void ValidarNome(string nome)
-        {
-            if (string.IsNullOrEmpty(nome))
-                throw new DomainException("O nome do local não pode ser nulo ou vazio");
-
-            if (nome.Length < 4 || nome.Length > 25)
-                throw new DomainException("O nome do local deve possuir entre 4 a 20 caracteres");
-        }
-
-        private static void ValidarCapacidadeMax(int capacidade, IEnumerable<Setor> setores) 
-        {
-            var capacidadeTotalSetores = setores.Sum(s => s.Capacidade);
-
-            if (capacidadeTotalSetores > capacidade)
-                throw new DomainException("A soma da capacidade dos setores é maior que a capacidade máxima do local");          
-        }
-        private void ValidarCapacidadeMax(IEnumerable<Setor> setores) 
-        {
-            var capacidadeTotalNova = 0;
-            
-            _setores.ForEach(c => capacidadeTotalNova += c.Capacidade);
-
-            foreach (var setor in setores)
-            {
-                capacidadeTotalNova += setor.Capacidade;
-            }
-
-            if (capacidadeTotalNova > CapacaidadeTotal)
-                throw new DomainException("A soma da capacidade dos setores é maior que a capacidade máxima do local");          
-        }
+            => Endereco = novo;
+        
     }
 }

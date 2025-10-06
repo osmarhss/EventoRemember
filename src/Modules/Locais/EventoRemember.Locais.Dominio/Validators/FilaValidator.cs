@@ -4,7 +4,7 @@ namespace EventoRemember.Locais.Domain.Validators
 {
     public class FilaValidator
     {
-        private List<string> _errors = new();
+        private readonly List<string> _errors = new();
 
         public FilaValidator(string codigo, int qtdCadeiras) 
         {
