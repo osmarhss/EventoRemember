@@ -2,7 +2,7 @@
 
 namespace EventoRemember.Locais.Domain.Enum
 {
-    public enum SetorSituacao
+    public enum LocalSituacao
     {
         [Description("Em análise")]
         EmAnalise = 0,
@@ -11,6 +11,12 @@ namespace EventoRemember.Locais.Domain.Enum
         Aprovado,
 
         [Description("Indisponível")]
-        Indisponivel
+        Indisponivel,
+
+        [Description("Inativo")]
+        Inativo,
+
+        [Description("Inválido")]
+        Inválido
     }
 }

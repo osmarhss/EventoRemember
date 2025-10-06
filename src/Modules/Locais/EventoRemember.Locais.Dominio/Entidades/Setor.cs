@@ -76,7 +76,6 @@ namespace EventoRemember.Locais.Domain.Entidades
             Ativo = situacao switch
             {
                 SetorSituacao.Aprovado => Ativo = true,
-                SetorSituacao.CapacidadeInvalidada => Ativo = false,
                 SetorSituacao.EmAnalise => Ativo = false,
                 SetorSituacao.Indisponivel => throw new DomainException("Somente o usuário pode definir como indisponível"),
                 _ => throw new DomainException("Entrada inválida"),

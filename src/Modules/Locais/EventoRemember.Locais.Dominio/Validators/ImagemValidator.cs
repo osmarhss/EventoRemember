@@ -2,7 +2,7 @@
 {
     public class ImagemValidator
     {
-        private List<string> _errors = new();
+        private readonly List<string> _errors = new();
         private const long _tamanhoMax = 30000;
         public ImagemValidator(string url, string nomeArquivo, long tamanhoBytes)
         {
