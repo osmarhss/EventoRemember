@@ -2,6 +2,7 @@
 using EventoRemember.BuildingBlocks.Domain.Exceptions;
 using EventoRemember.BuildingBlocks.Domain.Validators;
 using EventoRemember.Locais.Domain.Entidades;
+using EventoRemember.Locais.Domain.Enum;
 using EventoRemember.Locais.Domain.Validators;
 using EventoRemember.Locais.Domain.VOs;
 using EventoRemember.Locais.Dominio.Enum;
@@ -15,7 +16,7 @@ namespace EventoRemember.Locais.Dominio.Entidades
 
         protected Local() { } //EF
         private Local(string nome, string descricao, int capacidadeTotal, bool setoresPersonalizaveis, double? metrosQuadUtilizaveis, 
-            TipoLocal tipo, EnderecoVo endereco, IEnumerable<ImagemVo> imagens, IEnumerable<Setor> setores) : base()
+            LocalSituacao situacao, TipoLocal tipo, EnderecoVo endereco, IEnumerable<ImagemVo> imagens, IEnumerable<Setor> setores) : base()
         {
             Nome = nome;
             CapacaidadeTotal = capacidadeTotal;
@@ -36,19 +37,20 @@ namespace EventoRemember.Locais.Dominio.Entidades
         public double? MetrosQuadUtilizaveis { get; private set; }
         public string? MotivoInvalido { get; private set; }
         public TipoLocal Tipo { get; private set; }
+        public LocalSituacao Situacao { get; private set; }
         public EnderecoVo Endereco { get; private set; }
         public IReadOnlyCollection<Setor> Setores => _setores.AsReadOnly();
         public IReadOnlyCollection<ImagemVo> Imagens => _imagens.AsReadOnly();
 
-        public static Result<Local> Criar(string nome, string descricao, int capacidadeTotal, bool setoresPersonalizaveis, double metrosQuadrados, 
+        public static Result<Local> Criar(string nome, string descricao, int capacidadeTotal, bool setoresPersonalizaveis, double? metrosQuadrados, 
             TipoLocal tipo, EnderecoVo endereco, IEnumerable<ImagemVo> imagens, IEnumerable<Setor> setores) 
         {
-            var validator = LocalValidator.ValidarAoCriar(nome, capacidadeTotal, imagens, setores);
+            var validator = LocalValidator.ValidarAoCriar(nome, descricao, capacidadeTotal, imagens, setores);
 
             if (validator.Errors.Count > 0)
                 return Result<Local>.Failure(validator.Errors);
 
-            var local = new Local(nome, descricao, capacidadeTotal, setoresPersonalizaveis, metrosQuadrados, tipo, endereco, imagens, setores);
+            var local = new Local(nome, descricao, capacidadeTotal, setoresPersonalizaveis, metrosQuadrados, LocalSituacao.EmAnalise, tipo, endereco, imagens, setores);
 
             return Result<Local>.Success(local);
         }

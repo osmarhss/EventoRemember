@@ -10,11 +10,12 @@ namespace EventoRemember.Locais.Domain.Validators
 
         public LocalValidator() { }
 
-        public static Result ValidarAoCriar(string nome, int capacidade, IEnumerable<ImagemVo> imagens,
+        public static Result ValidarAoCriar(string nome, string descricao, int capacidade, IEnumerable<ImagemVo> imagens,
             IEnumerable<Setor> setores)
             => ValidarComo(v => 
             {
                 v.ValidarNome(nome);
+                v.ValidarDescricao(descricao);
                 v.ValidarCapacidadePermitida(capacidade);
                 v.ValidarCapacidadeMaxComSetores(capacidade, setores);
                 v.ValidarImagens(imagens);
@@ -53,8 +54,17 @@ namespace EventoRemember.Locais.Domain.Validators
             if (string.IsNullOrEmpty(nome))
                 _errors.Add("O nome do local não pode ser nulo ou vazio");
 
-            if (nome.Length < 4 || nome.Length > 25)
+            else if (nome.Length < 4 || nome.Length > 25)
                 _errors.Add("O nome do local deve possuir entre 4 a 20 caracteres");
+        }
+
+        private void ValidarDescricao(string descricao)
+        {
+            if (string.IsNullOrEmpty(descricao))
+                _errors.Add("A descrição do local não pode ser nula ou vazia");
+
+            else if (descricao.Length < 15 || descricao.Length > 500)
+                _errors.Add("A descrição precisa conter entre 15 a 500 caracteres");
         }
 
         private void ValidarCapacidadePermitida(int capacidade)
@@ -63,9 +73,13 @@ namespace EventoRemember.Locais.Domain.Validators
                 _errors.Add("O local precisa ter capacidade entre 20 e 500000 pessoas");
         }
 
-        private void ValidarImagens(IEnumerable<ImagemVo> imagens) 
+        private void ValidarImagens(IEnumerable<ImagemVo> imagens)
         {
-            ValidarQuantidadeDeImagens(imagens.Count());
+            if (imagens is null || !imagens.Any())
+                _errors.Add("É necessário possuir ao menos uma foto do local");
+
+            else
+                ValidarQuantidadeDeImagens(imagens.Count());
         }
 
         private void ValidarNovasImagens(IEnumerable<ImagemVo> imagensAtuais, IEnumerable<ImagemVo> novasImagens) 
@@ -96,7 +110,7 @@ namespace EventoRemember.Locais.Domain.Validators
         private void ValidarTotalSetores(IEnumerable<Setor> setores) 
         {
             if (setores.Count() > 25)
-                _errors.Add("O máximo de setores permitidos é de 25.");
+                _errors.Add("O número máximo de setores permitido é 25.");
         }
 
         private void ValidarCapacidadeMaxComSetores(int capacidade, IEnumerable<Setor> setores)

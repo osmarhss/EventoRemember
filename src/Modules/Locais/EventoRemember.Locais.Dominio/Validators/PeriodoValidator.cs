@@ -17,7 +17,7 @@ namespace EventoRemember.Locais.Domain.Validators
 
         private void ValidarDataEvento(DateTime inicio, DateTime fim) 
         {
-            if(inicio > fim)
+            if (inicio > fim)
                 _errors.Add("O fim do evento não pode ser antes do início");
 
             if (DateTime.Now < DateTime.Now.AddYears(5))
